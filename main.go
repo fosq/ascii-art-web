@@ -7,6 +7,11 @@ import (
 	"text/template"
 )
 
+type IO struct {
+	Input  string
+	Output string
+}
+
 // Server runs on http://localhost:8080/
 
 func main() {
@@ -26,17 +31,45 @@ func main() {
 // Handles POST from /form
 func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 
-	var input string
-
+	var io IO
 	whtml, err := template.ParseFiles("templates/index.html")
 
 	if err != nil {
 		http.Error(w, "404 - Resource not found", http.StatusNotFound)
 	}
 
+	if r.URL.Path != "/" && r.URL.Path != "/ascii-art" {
+		http.Error(w, "404 - Page not found", http.StatusNotFound)
+		return
+	}
+
 	if r.URL.Path == "/" {
 		w.WriteHeader(http.StatusOK)
-		whtml.Execute(w, input)
+		whtml.Execute(w, io)
+	} else {
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "500 - Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		font := r.FormValue("fonts")
+		io.Input = r.PostFormValue("input")
+
+		if !checkFalseCharacters(io.Input) {
+			http.Error(w, "400 - Bad request", http.StatusBadRequest)
+			return
+		}
+
+		if io.Input == "" {
+			whtml.Execute(w, io)
+			return
+		}
+
+		ascii := getAscii(io.Input, font)
+
+		whtml, _ = template.ParseFiles("templates/index.html")
+		w.WriteHeader(http.StatusOK)
+		io.Output = strArrayToString(ascii)
+		err = whtml.Execute(w, io)
 	}
 	// Handles security, checks if url path is /ascii-art, else returns error 404
 	/*if r.URL.Path != "/ascii-art" {
@@ -51,26 +84,8 @@ func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 	}*/
 
 	// Check for any internal errors
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "500 - Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	input = r.PostFormValue("input")
-	//font := r.FormValue("fonts")
-	input = removeQuotations(input)
-
-	if input == "" {
-		w.WriteHeader(http.StatusOK)
-		whtml.Execute(w, "Hello execute!")
-		return
-	}
 
 	// Check for non-ascii characters, if found returns error code 400
-	if !checkFalseCharacters(input) {
-		http.Error(w, "400 - Bad request", http.StatusBadRequest)
-		return
-	}
 
 	// Splits input by newlines
 	/*	splitNewlines := strings.Split(input, "\n")
@@ -87,20 +102,7 @@ func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "\n")
 			}
 		}*/
-	whtml.Execute(w, "hello")
-}
 
-// Removes " from input, if found at the beginning and end of string
-func removeQuotations(input string) string {
-	var newInput string
-	lenInput := len(input) - 1
-	if lenInput > 1 {
-		if input[0] == '"' && input[lenInput] == '"' {
-			newInput = input[1:lenInput]
-			return newInput
-		}
-	}
-	return input
 }
 
 func checkFalseCharacters(input string) bool {

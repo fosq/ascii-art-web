@@ -20,7 +20,8 @@ func getAscii(input string, font string) []string {
 // Prints asciicode characters
 func printAscii(textArr []string, input string) []string {
 	var asciiArray []string
-	splitInput := strings.Split(input, `\n`) // Split input by newline into a string array
+	input = strings.ReplaceAll(input, "\r\n", "\n")
+	splitInput := strings.Split(input, "\n") // Split input by newline into a string array
 	for i := range splitInput {              // Loop over splitInput
 		if splitInput[i] != "" { // If string is not empty, continue
 			for j := 0; j < 8; j++ { // Loop over 8, the height of an ascii character
@@ -43,4 +44,12 @@ func check(err error) {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
+}
+
+func strArrayToString(input []string) string {
+	result := ""
+	for i := range input {
+		result = result + input[i] + "\n"
+	}
+	return result
 }

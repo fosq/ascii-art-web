@@ -8,12 +8,13 @@
 </head>
 <body>
 <div>
-  <form method="POST" action="/">  
+  <form method="POST" action="/ascii-art">  
 
       <label>Asciify your code:</label>
       <br><br>
-      <textarea name="input" rows="3" cols="50" placeholder="Enter your asciifiable code!"></textarea>
+      <textarea name="input" autofocus rows="3" id="toptext" cols="50" placeholder="Enter your asciifiable code!"></textarea>
       <br><br>
+  </body>
       <label class="container">Standard
         <input type="radio" checked="checked" name="fonts" value="standard.txt">
         <span class="checkmark"></span>
@@ -28,11 +29,11 @@
       </label>
       <br><br>
       <input type="submit" value="submit" />
-  </form>
-</div>
+  </div>
+</form>
 <br><br>
 <div id="output">
   <pre>{{.Output}}</pre>
 </div>
-</body>
+
 </html>

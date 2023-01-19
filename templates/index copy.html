@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../templates/styles.css">
+  <title>ASCIIFY EVERYTHING!</title>
 </head>
 <body>
 <div>
-  <form method="POST" action="/ascii-art">  
-
+  <form method="POST" action="/">  
       <label>Asciify your code:</label>
       <br><br>
       <textarea name="input" rows="3" cols="50" placeholder="Enter your asciifiable code!"></textarea>
-      <select name="fonts">
-        <option value="standard.txt">Standard</option>
-        <option value="tinkertoy.txt">Tinkertoy</option>
-        <option value="shadow.txt">Shadow</option>
-      </select> 
+      <br><br>
+      <label class="container">Standard
+        <input type="radio" checked="checked" name="fonts" value="standard.txt">
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">Tinkertoy
+        <input type="radio" name="fonts" value="tinkertoy.txt">
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">Shadow
+        <input type="radio" name="fonts" value="shadow.txt">
+        <span class="checkmark"></span>
+      </label>
       <br><br>
       <input type="submit" value="submit" />
   </form>
+</div>
+<br><br>
+<div id="output">
+  <pre>{{.Output}}</pre>
 </div>
 </body>
 </html>
