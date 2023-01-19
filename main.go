@@ -56,9 +56,15 @@ func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	input = r.FormValue("input")
+	input = r.PostFormValue("input")
 	//font := r.FormValue("fonts")
 	input = removeQuotations(input)
+
+	if input == "" {
+		w.WriteHeader(http.StatusOK)
+		whtml.Execute(w, "Hello execute!")
+		return
+	}
 
 	// Check for non-ascii characters, if found returns error code 400
 	if !checkFalseCharacters(input) {
@@ -81,6 +87,7 @@ func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "\n")
 			}
 		}*/
+	whtml.Execute(w, "hello")
 }
 
 // Removes " from input, if found at the beginning and end of string
