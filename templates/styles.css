@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 body {                
-    padding-top: 15%;
+    padding-top: 5%;
     color: lightgray;
     text-align: center;
     background-color: rgb(37, 35, 35);
@@ -12,6 +12,19 @@ body {
     align-items: center; 
     height: 20vh;
 }
+
+#output {
+  background-color: whitesmoke;
+  opacity: 0.5;
+  text-align: left;
+  border-style: solid;    
+  border-color: lightgray;
+  height: 300px;
+  margin-top: 10px;
+  overflow: auto;
+}
+
+
 .container {
   display: block;
   position: relative;
