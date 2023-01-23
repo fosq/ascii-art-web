@@ -16,8 +16,6 @@ type IO struct {
 
 func main() {
 
-	//fileServer := http.FileServer(http.Dir("./templates")) // Creates file server object FileServer
-	//http.Handle("/", fileServer)                           // Handles "/" path to static directory
 	http.Handle("/templates/", http.StripPrefix("/templates", http.FileServer(http.Dir("templates"))))
 
 	http.HandleFunc("/", asciiFormHandler) // Handles /ascii-art
@@ -40,6 +38,11 @@ func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.URL.Path != "/" && r.URL.Path != "/ascii-art" {
 		http.Error(w, "404 - Page not found", http.StatusNotFound)
+		return
+	}
+
+	if r.Method != "POST" {
+		http.Error(w, "405 - Method is not supported.", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -78,10 +81,6 @@ func asciiFormHandler(w http.ResponseWriter, r *http.Request) {
 	} */
 
 	// Security, checks if method is POST, else returns error 405
-	/*if r.Method != "POST" {
-		http.Error(w, "405 - Method is not supported.", http.StatusMethodNotAllowed)
-		return
-	}*/
 
 	// Check for any internal errors
 
