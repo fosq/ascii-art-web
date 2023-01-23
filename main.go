@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/", asciiFormHandler) // Handles /ascii-art
 
 	fmt.Printf("Starting server at port 8080, access the page with 'localhost:8080' in a browser\n")
+	fmt.Printf("Press 'Ctrl + C' to end the server\n")
 	if err := http.ListenAndServe(":8080", nil); err != nil { // Listens on port 8080
 		log.Fatal(err)
 	}
